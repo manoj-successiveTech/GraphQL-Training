@@ -1,0 +1,37 @@
+# User type
+type User {
+  id: ID!
+  name: String!
+  email: String!  # Added email field
+  posts: [Post]   # Relationship to Post
+}
+
+# Post type
+type Post {
+  id: ID!
+  title: String!
+  content: String!
+  author: User      # Relationship to User
+  createdAt: String # Added createdAt field
+  comments: [Comment] # Relationship to Comment
+}
+
+# Comment type
+type Comment {
+  id: ID!
+  text: String!
+  author: User      # Relationship to User
+  post: Post        # Relationship to Post
+  createdAt: String # Added createdAt field
+}
+
+# Queries
+type Query {
+  users: [User]            # Fetch all users
+  user(id: ID!): User      # Fetch user by ID
+  posts: [Post]            # Fetch all posts
+  post(id: ID!): Post      # Fetch post by ID
+  comments: [Comment]      # Fetch all comments
+  commentsByPost(postId: ID!): [Comment] # Fetch comments by Post ID
+  commentsByUser(userId: ID!): [Comment] # Fetch comments by User ID
+}
