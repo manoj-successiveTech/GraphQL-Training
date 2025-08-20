@@ -1,29 +1,28 @@
-import { posts, comments } from './dataSource';
+// src/modules/assignment-1/blogs/messages/mutation.js
 
-// Mutations to create Post and Comment
-const resolvers = {
+import { posts, comments } from './dataSource.js';
+
+const blogMutationResolvers = {
   Mutation: {
-    // Mutation to create a new post
     createPost: (parent, { title, content, authorId }) => {
       const newPost = {
-        id: String(posts.length + 1),  // Mock ID generator
+        id: String(posts.length + 1),
         title,
         content,
         authorId,
-        createdAt: new Date().toISOString(),  // Current timestamp
+        createdAt: new Date().toISOString(),
       };
       posts.push(newPost);
       return newPost;
     },
 
-    // Mutation to create a new comment
     createComment: (parent, { text, postId, authorId }) => {
       const newComment = {
-        id: String(comments.length + 1),  // Mock ID generator
+        id: String(comments.length + 1),
         text,
         postId,
         authorId,
-        createdAt: new Date().toISOString(),  // Current timestamp
+        createdAt: new Date().toISOString(),
       };
       comments.push(newComment);
       return newComment;
@@ -31,4 +30,4 @@ const resolvers = {
   },
 };
 
-export default resolvers;
+export default blogMutationResolvers;

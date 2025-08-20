@@ -1,5 +1,11 @@
 type Query {
   messages: [Message!]!
+  users: [User!]!
+  user(id: ID!): User
+  posts: [Post!]!
+  post(id: ID!): Post
+  comments: [Comment!]!
+  comment(id: ID!): Comment
 }
 
 type Mutation {

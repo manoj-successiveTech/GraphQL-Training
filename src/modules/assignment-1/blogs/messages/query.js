@@ -1,44 +1,50 @@
-import { users, posts, comments } from './dataSource';
+// src/modules/assignment-1/blogs/messages/query.js
 
-// Resolvers for Query type
-const resolvers = {
+import { users, posts, comments } from './dataSource.js';
+
+// Resolvers for Query and nested relationships
+const queryResolvers = {
   Query: {
     // Fetch all users
     users: () => users,
 
-    // Fetch a user by ID
-    user: (parent, { id }) => users.find(user => user.id === id),
+    // Fetch a single user by ID
+    user: (_, { id }) => users.find(user => user.id === id),
 
     // Fetch all posts
-    posts: () => posts,
+    posts: (_, {autherId}) => posts.fin(post => post.authorId === autherId),
 
-    // Fetch a post by ID
-    post: (parent, { id }) => posts.find(post => post.id === id),
+    // Fetch a single post by ID
+    post: (_, { id }) => posts.find(post => post.id === id),
 
     // Fetch all comments
     comments: () => comments,
 
-    // Fetch comments by Post ID
-    commentsByPost: (parent, { postId }) => comments.filter(comment => comment.postId === postId),
+    // Fetch comments by post ID
+    commentsByPost: (_, { postId }) =>
+      comments.filter(comment => comment.postId === postId),
 
-    // Fetch comments by User ID
-    commentsByUser: (parent, { userId }) => comments.filter(comment => comment.authorId === userId),
+    // Fetch comments by user ID
+    commentsByUser: (_, { userId }) =>
+      comments.filter(comment => comment.authorId === userId),
   },
 
-  // Resolvers for relationships (Nested objects)
+  // Nested resolvers for User type
   User: {
     posts: (parent) => posts.filter(post => post.authorId === parent.id),
   },
 
+  // Nested resolvers for Post type
   Post: {
     author: (parent) => users.find(user => user.id === parent.authorId),
     comments: (parent) => comments.filter(comment => comment.postId === parent.id),
   },
 
+  // Nested resolvers for Comment type
   Comment: {
     post: (parent) => posts.find(post => post.id === parent.postId),
     author: (parent) => users.find(user => user.id === parent.authorId),
   },
 };
 
-export default resolvers;
+export default queryResolvers;

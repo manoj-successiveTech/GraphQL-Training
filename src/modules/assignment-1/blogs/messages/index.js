@@ -1,18 +1,11 @@
-import { ApolloServer, gql } from 'apollo-server';
-import { readFileSync } from 'fs';
-import resolvers from './query';  // Import resolvers
-import { users, posts, comments } from '../messages/dataSource';
+// src/modules/assignment-1/blogs/messages/index.js
 
-// Read the schema from type.gql
-const typeDefs = gql(readFileSync('./type.gql', { encoding: 'utf-8' }));
+import queryResolvers from './query.js';
+import blogMutationResolvers from './mutation.js';
 
-// Initialize ApolloServer
-const server = new ApolloServer({
-  typeDefs,
-  resolvers,
-});
+const resolvers = {
+  ...queryResolvers,
+  ...blogMutationResolvers,
+};
 
-// Start the server
-server.listen().then(({ url }) => {
-  console.log(`Server ready at ${url}`);
-});
+export default resolvers;

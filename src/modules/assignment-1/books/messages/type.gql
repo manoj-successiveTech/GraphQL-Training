@@ -1,0 +1,14 @@
+type Message {
+  id: ID!
+  content: String!
+  author: String!
+  createdAt: String
+}
+
+extend type Query {
+  messages: [Message!]!
+}
+
+extend type Mutation {
+  postMessage(content: String!, author: String!): Message!
+}
