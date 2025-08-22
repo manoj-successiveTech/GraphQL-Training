@@ -8,7 +8,7 @@ type Query {
   comments(postId: ID!): [Comment!]!
   commentsByPost(postId: ID!): [Comment!]!
   commentsByUser(userId: ID!): [Comment!]!
-  paginatedPosts(page: Int, pageSize: Int): [Post!]!  #  posts with pagination parameters(2.6)
+  paginatedPosts(page: Int, pageSize: Int, sortBy: String!, order: String!): [Post!]!  #  posts with pagination parameters(2.6)
 }
 
 type Mutation {
