@@ -1,0 +1,74 @@
+GraphQL basic folder structure
+
+GRAPHQL-TRAINING/
+│
+├── node_modules/        # Installed npm packages
+│
+├── src/                 # Source code folder
+│   ├── config/          # Configuration files (e.g., environment, DB config)
+│   ├── modules/         # Application modules (e.g., users, posts, comments)
+│   └── schema/          # GraphQL schema definitions (SDL or JS files)
+│
+├── .env                 # Environment variables file
+├── .gitignore           # Files and folders ignored by Git
+├── index.js             # Application entry point, starts the server
+├── package-lock.json    # Auto-generated npm dependencies lock file
+├── package.json         # npm project metadata and dependencies
+└── README.md            # Project documentation file
+
+
+Folder Structure Description:
+
+node_modules/
+This folder contains all the dependencies installed via npm (Node Package Manager). You usually don't touch this folder directly; it’s managed automatically.
+
+src/
+This is the main source code folder for your project.
+Inside src:
+
+config/
+Typically used for configuration files (e.g., database connection, environment config).
+
+modules/
+Usually contains feature-specific code split into modules (like user module, post module).
+
+schema/
+This folder likely contains GraphQL schema definitions (SDL files or resolvers).
+
+.env
+A file that holds environment variables such as API keys, database URLs, or secrets. This file should not be shared publicly.
+
+.gitignore
+Specifies files and folders that Git should ignore (not track).
+
+index.js
+The main entry point of the application. It usually starts the server and imports required modules.
+
+package-lock.json
+Automatically generated file that locks the dependency versions for consistent installs.
+
+package.json
+Defines the project metadata, dependencies, scripts, and more.
+
+README.md
+A markdown file typically used to describe the project, setup instructions, and documentation.
+
+---
+
+
+
+| **Aspect**             | **RESTful API**                                                                                                         | **GraphQL API**                                                                                                    |
+| ---------------------- | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| **Endpoint Structure** | Multiple endpoints designed for different resources, e.g., `/users`, `/posts`, `/comments`.                             | Single endpoint (usually `/graphql`) to access all data, regardless of resource type.                              |
+| **Data Fetching**      | Returns a fixed set of data for each endpoint. To get related data, multiple endpoints often need to be called.         | Clients specify exactly what data they need in queries, allowing nested and selective fetching in one request.     |
+| **Over-fetching**      | Common issue: endpoints may return more data than needed, leading to wasted bandwidth and slower performance.           | Avoided: clients request only the specific fields they need, reducing data transfer and improving efficiency.      |
+| **Under-fetching**     | Common issue: client often gets insufficient data in one request, requiring multiple round-trips to fetch related data. | Solved: clients can fetch all related data in one query, avoiding multiple network requests.                       |
+| **Response Format**    | Responses are predefined by the server and may include unnecessary fields or nested objects the client doesn’t need.    | Responses match exactly the structure requested by the client query, no extra data is included.                    |
+| **Versioning**         | Changes often require versioning (v1, v2, etc.) to avoid breaking existing clients when API changes.                    | Schema evolves without strict versioning. Clients specify the fields they want, enabling backward compatibility.   |
+| **Error Handling**     | Standard HTTP status codes (404, 500, etc.) are used to indicate success or failure of requests.                        | Errors are returned in a separate part of the response alongside data, allowing partial success.                   |
+| **Caching**            | Easy to cache using HTTP caching (e.g., based on URL and headers).                                                      | Caching can be more complex since all queries go to a single endpoint, but solutions like persisted queries exist. |
+| **Learning Curve**     | Widely understood and simpler to implement initially, especially for basic CRUD operations.                             | Steeper learning curve due to query language and schema design but more flexible in the long run.                  |
+| **Tooling**            | Mature tooling available for REST API development and testing (Postman, Swagger, etc.).                                 | Growing ecosystem of tools for schema design, testing, and introspection (GraphiQL, Apollo Studio).                |
+| **Use Cases**          | Simple CRUD apps, microservices with clear resource boundaries, or when caching is critical.                            | Complex UIs needing flexible data, apps requiring minimal requests, or when optimizing network usage is important. |
+
+
