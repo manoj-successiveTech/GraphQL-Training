@@ -13,8 +13,7 @@ import { pubsub } from "./pubsub.js"; // Import the pubsub instance
 
 import { typeDefs } from "../schema/typedefs.js";
 import { resolvers } from "../schema/resolvers.js";
-
-
+import { ConnectDB } from "../configs/dbConnect.js";
 
 export async function createExpressServer() {
   const app = express();
@@ -23,6 +22,7 @@ export async function createExpressServer() {
   // Build executable schema
   const schema = makeExecutableSchema({ typeDefs, resolvers });
 
+  ConnectDB();
   // Apollo Server setup
   const server = new ApolloServer({
     schema,
@@ -39,7 +39,7 @@ export async function createExpressServer() {
     cors(),
     express.json(),
     expressMiddleware(server, {
-      context: async ({req}) => ({ user:req.user,pubsub }),
+      context: async ({ req }) => ({ user: req.user, pubsub }),
     })
   );
 

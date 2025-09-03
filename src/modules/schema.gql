@@ -19,6 +19,7 @@ type Query {
   commentsByPost(postId: ID!): [Comment!]!
   commentsByUser(userId: ID!): [Comment!]!
   paginatedPosts(page: Int, pageSize: Int, sortBy: String!, order: String!): [Post!]!  #  posts with pagination parameters(2.6)
+  getMessageHistory(userId:ID!):[Message!]!  #fetching message history 3.5
 }
 
 type Mutation {

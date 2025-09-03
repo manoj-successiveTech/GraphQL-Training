@@ -55,36 +55,36 @@ const queryResolvers = {
     },
 
     // fetch all messages (optional if you are using messages)
-    messages: () => [], 
+    messages: () => [],
 
+    // Fetch paginated posts (2.6)
 
-   // Fetch paginated posts (2.6)
-   
-   paginatedPosts: async (_, { page = 1, pageSize = 5 ,sortBy = "id", order = "asc"}) => {
+    paginatedPosts: async (
+      _,
+      { page = 1, pageSize = 5, sortBy = "id", order = "asc" }
+    ) => {
       // Calculate starting and ending indices for pagination
 
       const sortedPosts = [...posts];
 
       if (sortBy === "id") {
-      sortedPosts.sort((a, b) =>
-        order === "asc"
-          ? Number(a.id) - Number(b.id)
-          : Number(b.id) - Number(a.id)
-      );
-    } else if (sortBy === "date") {
-      sortedPosts.sort((a, b) => {
-        const dateA = new Date(a.createdAt);
-        const dateB = new Date(b.createdAt);
-        order === "asc" ? dateA - dateB : dateB - dateA;
-      });
-    }
+        sortedPosts.sort((a, b) =>
+          order === "asc"
+            ? Number(a.id) - Number(b.id)
+            : Number(b.id) - Number(a.id)
+        );
+      } else if (sortBy === "date") {
+        sortedPosts.sort((a, b) => {
+          const dateA = new Date(a.createdAt);
+          const dateB = new Date(b.createdAt);
+          order === "asc" ? dateA - dateB : dateB - dateA;
+        });
+      }
 
-    const start = (page - 1) * pageSize;
-    const end = start + pageSize;
-    return sortedPosts.slice(start, end);
-      
+      const start = (page - 1) * pageSize;
+      const end = start + pageSize;
+      return sortedPosts.slice(start, end);
     },
-
   },
 
   // nested resolvers for User type
@@ -111,6 +111,15 @@ const queryResolvers = {
   Comment: {
     post: (parent) => posts.find((post) => post.id === parent.postId),
     author: (parent) => users.find((user) => user.id === parent.authorId),
+  },
+
+  //  Include a query for fetching message history ass3.5
+
+  getMessageHistory: (_, { userId }) => {
+    const userMessageHistory = messages.filter(
+      (message) => message.author === userId || message.recipient === userId
+    );
+    return userMessageHistory;
   },
 };
 
