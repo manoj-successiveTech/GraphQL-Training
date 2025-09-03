@@ -9,3 +9,5 @@ query.js: This will contain the resolvers for handling GraphQL queries.
 mutation.js: This will handle any mutations, such as creating, updating, or deleting posts/comments.
 
 index.js: The entry point for the GraphQL server setup.
+
+
