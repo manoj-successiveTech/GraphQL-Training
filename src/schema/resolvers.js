@@ -4,16 +4,25 @@ import { messageMutationResolvers } from "../modules/assignment-1/books/messages
 import queryResolvers from "../modules/assignment-1/blogs/messages/query.js";
 import blogMutationResolvers from "../modules/assignment-1/blogs/messages/mutation.js";
 import { comments, posts, users } from "../modules/assignment-1/blogs/messages/dataSource.js";
+import { blogSubscriptionResolvers } from "../modules/assignment-1/blogs/messages/subscription.js";
 
 export const resolvers = {
+  
   Query: {
     ...messageQueryResolvers,
     ...queryResolvers.Query,
   },
+  
   Mutation: {
     ...messageMutationResolvers,
     ...blogMutationResolvers.Mutation,
   },
+
+  Subscription:
+  {
+    ...blogSubscriptionResolvers,
+  },
+
   Comment: {
     author: (parent) => {
       const userId = parent.author;

@@ -1,4 +1,14 @@
 # modules/schema.gql
+
+type Post {
+  id: ID!
+  title: String!
+  content: String!
+  authorId: ID!
+  comments: [Comment!]!
+  createdAt: String
+}
+
 type Query {
   users: [User!]!
   user(id: ID!): User!
@@ -17,23 +27,33 @@ type Mutation {
   postMessage(content: String!, author: String!): Message!
   updateUser(id: ID!, name: String!): UserResult!
   deleteComment(id: ID!): Comment!
+  loginUser(email: String!, password: String!): UserResult
+  logoutUser(email: String!): UserResult
+  setUserPresence(userId: ID!, isOnline: Boolean!): Presence
+  registerUser(name: String!, email: String!): UserResult
 }
 
-type Post {
-  id: ID!
-  title: String!
-  content: String!
-  authorId: ID!
-  comments: [Comment!]!
-  createdAt: String
+type Subscription {
+  commentPosted: Comment!
+  userJoined: User!
+  userLeft: User!
+  # messageSent: Message!
 }
-
 type Message {
   id: ID!
   content: String!
   author: String!
   createdAt: String
 }
-
+type Error {
+  code: Int
+  message: String
+}
 #error user fo userResult( 2.5)
-union UserResult = User | Error  
+union UserResult = User | Error
+
+#schema uses the type Presence (ass- 3 in the mutation setUserPresence),
+type Presence {
+  userId: ID!
+  isOnline: Boolean!
+}
