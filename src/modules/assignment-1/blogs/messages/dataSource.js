@@ -1,7 +1,7 @@
 // src/modules/assignment-1/blogs/messages/dataSource.js
 
 export const users = [
-  { id: "1", name: "Anany", email: "anany@example.com" },
+  { id: "1", name: "Anany", email: "anany@example.com"},
   { id: "2", name: "Manoj", email: "manoj@example.com" },
   { id: "3", name: "Aryan", email: "aryan@example.com" },
   { id: "4", name: "Vishal", email: "vishal@example.com" },
@@ -9,7 +9,6 @@ export const users = [
   { id: "6", name: "Sneha", email: "sneha@example.com" },
   { id: "7", name: "Ravi", email: "ravi@example.com" },
   { id: "8", name: "Neha", email: "neha@example.com" },
-  
 ];
 
 export const posts = [
@@ -29,24 +28,59 @@ export const posts = [
   },
   {
     id: "3",
-    title: "Advanced GraphQL",
-    content: "Deep dive into resolvers",
+    title: "Frontend Integration",
+    content: "Connecting Apollo Client with React.",
     authorId: "3",
     createdAt: "2025-08-17T08:45:00Z",
   },
   {
     id: "4",
-    title: "GraphQL Subscriptions",
-    content: "Real-time updates made simple.",
-    authorId: "6",
+    title: "GraphQL vs REST",
+    content: "Why choose GraphQL over REST APIs?",
+    authorId: "4",
     createdAt: "2025-08-20T09:00:00Z",
   },
   {
     id: "5",
-    title: "Authentication with GraphQL",
-    content: "Secure your GraphQL API.",
+    title: "Authentication in GraphQL",
+    content: "Securing your GraphQL endpoints.",
+    authorId: "5",
+    createdAt: "2025-08-20T10:00:00Z",
+  },
+  {
+    id: "6",
+    title: "GraphQL Subscriptions",
+    content: "Real-time data with GraphQL subscriptions.",
+    authorId: "6",
+    createdAt: "2025-08-21T11:15:00Z",
+  },
+  {
+    id: "7",
+    title: "Pagination Techniques",
+    content: "Cursor vs offset pagination in GraphQL.",
     authorId: "7",
-    createdAt: "2025-08-20T10:15:00Z",
+    createdAt: "2025-08-21T13:00:00Z",
+  },
+  {
+    id: "8",
+    title: "GraphQL Error Handling",
+    content: "Best practices for handling errors in GraphQL.",
+    authorId: "8",
+    createdAt: "2025-08-21T15:20:00Z",
+  },
+    {
+    id: "9",
+    title: "Performance Optimization",
+    content: "Improving GraphQL query performance.",
+    authorId: "2",
+    createdAt: "2025-08-22T09:40:00Z",
+  },
+  {
+    id: "10",
+    title: "Schema Design Principles",
+    content: "Tips for designing an effective GraphQL schema.",
+    authorId: "1",
+    createdAt: "2025-08-22T10:10:00Z",
   },
 ];
 
@@ -94,11 +128,3 @@ export const comments = [
     createdAt: "2025-08-20T10:45:00Z",
   },
 ];
-
-// Utility functions for data retrieval
-
-export const getUserById = (id) => users.find((user) => user.id === id);
-export const getPostById = (id) => posts.find((post) => post.id === id);
-export const getPostsByUserId = (userId) => posts.filter((post) => post.authorId === userId);
-export const getCommentsByPostId = (postId) => comments.filter((comment) => comment.postId === postId);
-export const getCommentsByUserId = (userId) => comments.filter((comment) => comment.author === userId);
