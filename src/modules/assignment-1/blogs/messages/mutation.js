@@ -21,7 +21,7 @@ const blogMutationResolvers = {
       const newPost = new Post({
         title,
         content,
-        authorId:finduser._id,
+        authorId: finduser._id,
         createdAt: new Date().toISOString(),
       });
       await newPost.save();
@@ -90,7 +90,6 @@ const blogMutationResolvers = {
 
     // Login user with password and JWT (publishes event)
     loginUser: async (_, { email, password }, context) => {
-
       if (!email || !password) {
         return {
           message: "Incorrect email or password",
@@ -98,8 +97,7 @@ const blogMutationResolvers = {
         };
       }
 
-
-      const user = await User.findOne({email});
+      const user = await User.findOne({ email });
       if (!user) {
         return {
           message: "Invalid credentials",
@@ -107,18 +105,18 @@ const blogMutationResolvers = {
         };
       }
 
-      const isAuthenticated=await bcrypt.compare(password,user.password);
+      const isAuthenticated = await bcrypt.compare(password, user.password);
 
-      if(!isAuthenticated){
-        return{
-          message:"Wrong credentials",
-          code:401
-        }
+      if (!isAuthenticated) {
+        return {
+          message: "Wrong credentials",
+          code: 401,
+        };
       }
       user.isOnline = true;
       await user.save();
-      context.pubsub.publish("USER_PRESENCE_CHANGED", {
-        userPresenceChanged: user,
+      context.pubsub.publish("USER_JOINED", {
+        userJoined: user,
       });
       const token = jwt.sign(
         { id: user._id, email: user.email },
@@ -135,14 +133,14 @@ const blogMutationResolvers = {
       if (!existingUser) throw new Error("User not found");
       existingUser.isOnline = false;
       await existingUser.save();
-      context.pubsub.publish("USER_PRESENCE_CHANGED", {
-        userPresenceChanged: existingUser,
+      context.pubsub.publish("USER_LEFT", {
+        userLeft: existingUser,
       });
       return { message: "Logged out" };
     },
 
     // Register new user
-    registerUser: async (_, { name, email, password,role }) => {
+    registerUser: async (_, { name, email, password, role }) => {
       if (!name || !email || !password) {
         return {
           message: "Name, Email, or Password is missing",
@@ -150,12 +148,12 @@ const blogMutationResolvers = {
         };
       }
       const existingUser = await User.findOne({ email });
-      const hashedPassword=await bcrypt.hash(password,12);
+      const hashedPassword = await bcrypt.hash(password, 12);
       if (existingUser) throw new Error("Email already registered");
       const newUser = new User({
         name,
         email,
-        password:hashedPassword,
+        password: hashedPassword,
         isOnline: false,
         role,
         createdAt: new Date().toISOString(),
