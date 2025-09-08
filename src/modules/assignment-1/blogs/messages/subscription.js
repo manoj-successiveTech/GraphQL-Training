@@ -10,7 +10,7 @@ export const blogSubscriptionResolvers = {
   },
 
   userLeft: {
-    subscribe: () =>  pubsub.asyncIterableIterator(["USER_LEFT"]),
+    subscribe: () => pubsub.asyncIterableIterator(["USER_LEFT"]),
   },
 };
 

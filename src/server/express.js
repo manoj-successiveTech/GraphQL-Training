@@ -14,6 +14,7 @@ import { pubsub } from "./pubsub.js"; // Import the pubsub instance
 import { typeDefs } from "../schema/typedefs.js";
 import { resolvers } from "../schema/resolvers.js";
 import { ConnectDB } from "../configs/dbConnect.js";
+import {auth} from "../middleware/auth.js";
 
 export async function createExpressServer() {
   const app = express();
@@ -38,6 +39,7 @@ export async function createExpressServer() {
     "/graphql",
     cors(),
     express.json(),
+    auth,
     expressMiddleware(server, {
       context: async ({ req }) => ({ user: req.user, pubsub }),
     })

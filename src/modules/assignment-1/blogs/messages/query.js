@@ -1,7 +1,10 @@
 // src/modules/assignment-1/blogs/messages/query.js
 
 import { delay } from "../../../../utils/delay.js";
-import { users, posts, comments } from "./dataSource.js";
+import User from "../../../../models/user.js";
+import Post from "../../../../models/post.js";
+import Comment from "../../../../models/comment.js";
+import Message from "../../../../models/message.js";
 
 // Resolvers for Query and nested relationships
 const queryResolvers = {
@@ -9,53 +12,65 @@ const queryResolvers = {
     // Fetch all users
     users: async () => {
       await delay(3000);
-      return users;
+      return User.find();
     },
 
     // Fetch a single user by ID
     user: async (_, { id }) => {
       await delay(3000);
-      return users.find((user) => user.id === id);
+      return User.findById(id);
     },
 
     // Fetch all posts
     posts: async () => {
       await delay(2000);
-      return posts;
+      return Post.find();
     },
 
     // Fetch a single post by ID
     post: async (_, { id }) => {
       await delay(2000);
-      return posts.find((post) => post.id === id);
+      return Post.findById(id);
     },
 
     // Fetch posts by authorId
     postsByAuthor: async (_, { authorId }) => {
       await delay(3000);
-      return posts.filter((post) => post.authorId === authorId);
+      return Post.find({ authorId });
     },
 
     // Fetch all comments
     comments: async () => {
       await delay(2000);
-      return comments;
+      return Comment.find();
     },
 
     // Fetch comments by post ID
     commentsByPost: async (_, { postId }) => {
       await delay(2000);
-      return comments.filter((comment) => comment.postId === postId);
+      return Comment.find({ postId });
     },
 
     // Fetch comments by user ID
     commentsByUser: async (_, { userId }) => {
       await delay(2000);
-      return comments.filter((comment) => comment.author === userId);
+      return Comment.find({ author: userId });
     },
 
     // fetch all messages (optional if you are using messages)
-    messages: () => [],
+    messages: async () => {
+      const messages = await Message.find();
+      if (!messages.length) return { code: 404, message: "No messages found" };
+      return messages;
+    },
+
+    // Fetch message history for a user
+    getMessageHistory: async (_, { userId }) => {
+      const messages = await Message.find({ author: userId });
+      if (!messages.length)
+        return { code: 404, message: "No message history found for this user" };
+      return messages;
+    },
 
     // Fetch paginated posts (2.6)
 
@@ -91,7 +106,7 @@ const queryResolvers = {
   User: {
     posts: async (parent) => {
       await delay(2000);
-      return posts.filter((post) => post.authorId === parent.id);
+      return Post.find({ authorId: parent.id });
     },
   },
 
@@ -99,27 +114,18 @@ const queryResolvers = {
   Post: {
     author: async (parent) => {
       await delay(2000);
-      return users.find((user) => user.id === parent.authorId);
+      return User.findById(parent.authorId);
     },
     comments: async (parent) => {
       await delay(2000);
-      return comments.filter((comment) => comment.postId === parent.id);
+      return Comment.find({ postId: parent.id });
     },
   },
 
   // Nested resolvers for Comment type
   Comment: {
-    post: (parent) => posts.find((post) => post.id === parent.postId),
-    author: (parent) => users.find((user) => user.id === parent.authorId),
-  },
-
-  //  Include a query for fetching message history ass3.5
-
-  getMessageHistory: (_, { userId }) => {
-    const userMessageHistory = messages.filter(
-      (message) => message.author === userId || message.recipient === userId
-    );
-    return userMessageHistory;
+    post: (parent) => Post.findById(parent.postId),
+    author: (parent) => User.findById(parent.authorId),
   },
 };
 
