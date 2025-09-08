@@ -133,10 +133,11 @@ const blogMutationResolvers = {
       if (!existingUser) throw new Error("User not found");
       existingUser.isOnline = false;
       await existingUser.save();
+
       context.pubsub.publish("USER_LEFT", {
         userLeft: existingUser,
       });
-      return { message: "Logged out" };
+      return existingUser;
     },
 
     // Register new user
