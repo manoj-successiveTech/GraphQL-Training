@@ -1,13 +1,73 @@
-type Query {
-  messages: [Message!]!
-  users: [User!]!
-  user(id: ID!): User
-  posts: [Post!]!
-  post(id: ID!): Post
+# modules/schema.gql
+
+type Post {
+  id: ID!
+  title: String!
+  content: String!
+  authorId: ID!
   comments: [Comment!]!
-  comment(id: ID!): Comment
+  createdAt: String
+}
+
+type Query {
+  users: [User!]!
+  user(id: ID!): User!
+  posts: [Post!]!
+  post(id: ID!): Post!
+  postsByAuthor(authorId: ID!): [Post!]!
+  comments(postId: ID!): [Comment!]!
+  commentsByPost(postId: ID!): [Comment!]!
+  commentsByUser(userId: ID!): [Comment!]!
+  paginatedPosts(
+    page: Int
+    pageSize: Int
+    sortBy: String!
+    order: String!
+  ): [Post!]! #  posts with pagination parameters(2.6)
+  getMessageHistory(userId: ID!): [Message!]! #fetching message history 3.5
 }
 
 type Mutation {
-  postMessage(content: String!, author: String!): Message!
+  createPost(title: String!, content: String!, authorId: ID!): Post!
+  createComment(text: String!, postId: ID!, authorId: ID!): Comment!
+  postMessage(content: String!, authorId: ID!, title: String): Message!
+  updateUser(id: ID!, name: String!): UserResult!
+  deleteComment(id: ID!): Comment!
+  loginUser(email: String!, password: String!): LoginResult
+  logoutUser(email: String!): UserResult
+  setUserPresence(userId: ID!, isOnline: Boolean!): Presence
+  registerUser(
+    name: String!
+    email: String!
+    password: String!
+    role: String!
+  ): UserResult
+  setUserOnline(userId: ID!): User!
+  setUserOffline(userId: ID!): User!
+}
+
+type Subscription {
+  commentPosted: Comment!
+  userJoined: User!
+  userLeft: User!
+  # messageSent: Message!
+}
+type Message {
+  id: ID!
+  content: String!
+  author: User!
+  title: String
+  createdAt: String
+}
+type Error {
+  code: Int
+  message: String
+}
+#error user fo userResult( 2.5)
+union UserResult = User | Error
+
+#schema uses the type Presence (ass- 3 in the mutation setUserPresence),
+type Presence {
+  userId: ID!
+  isOnline: Boolean!
 }

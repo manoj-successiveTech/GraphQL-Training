@@ -1,7 +1,7 @@
-# Define your entities here
+# src/modules/type.gql
 
 type User {
-  id: ID!
+  _id: ID!
   name: String!
   email: String!
   posts: [Post!]!
@@ -11,7 +11,7 @@ type Post {
   id: ID!
   title: String!
   content: String!
-  author: User!        # Relationship, not authorId
+  authorId: ID! # Relationship, not authorId
   comments: [Comment!]!
   createdAt: String
 }
@@ -23,19 +23,21 @@ type Comment {
   postId: String!
 }
 
-# Extend root Query type to add blogs-related queries
-
-extend type Query {
-  users: [User!]!
-  user(id: ID!): User
-  posts: [Post!]!
-  post(id: ID!): Post!
-  comments(postId: ID!): [Comment!]!
-   commentsByPost(postId: ID!): [Comment!]!
-   commentsByUser(userId: ID!): [Comment!]!
+type Message {
+  id: ID!
+  content: String!
+  author: User!
+  title: String
+  createdAt: String
 }
 
-type Mutation {
-  createPost(title: String!, content: String!, authorId: ID!): Post!
-  createComment(text: String!, postId: ID!, authorId: ID!): Comment!
+# custom error(ass-2.5)
+type Error{
+  code: Int!
+  message: String!
+}
+
+type LoginResult{
+  token:String!
+  user:User
 }
